@@ -1,47 +1,32 @@
-import React from 'react'
-import { View, StyleSheet } from 'react-native'
-import MapView, { PROVIDER_DEFAULT } from 'react-native-maps'
-import { connect } from 'react-redux'
+import React from "react";
+import { View, StyleSheet } from "react-native";
+import MapView, { PROVIDER_DEFAULT } from "react-native-maps";
+import { connect } from "react-redux";
 
 // UiAnimationLayout
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
-    width: '100%'
+    height: "100%",
+    width: "100%"
   },
   map: {
     ...StyleSheet.absoluteFillObject
   }
-})
+});
 
 class MapPage extends React.Component {
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
 
-    this.state = {
-      position: {
-        latitude: 0,
-        longitude: 0
-      }
-    }
+    console.log(this.props.location);
   }
 
   static navigationOptions = {
-    title: 'Carte des stations'
-  }
+    title: "Carte des stations"
+  };
 
-  componentDidMount () {
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        this.setState(state => ({ ...state, position: position.coords }))
-      },
-      error => Alert.alert(error.message),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-    )
-  }
-
-  render () {
+  render() {
     return (
       <View style={styles.container}>
         <MapView
@@ -51,8 +36,8 @@ class MapPage extends React.Component {
           showsUserLocation={true}
           showsPointsOfInterest={false}
           region={{
-            latitude: this.props.stations[0].location.latitude,
-            longitude: this.props.stations[0].location.longitude,
+            latitude: this.props.location.latitude,
+            longitude: this.props.location.longitude,
             latitudeDelta: 0.02,
             longitudeDelta: 0.02
           }}
@@ -62,19 +47,24 @@ class MapPage extends React.Component {
               key={station.code}
               coordinate={{
                 latitude: station.location.latitude,
-                longitude: station.location.longitude,
+                longitude: station.location.longitude
               }}
-              onPress={() => {this.props.navigation.push('StationInfo', {station})}}
+              onPress={() => {
+                this.props.navigation.push("StationInfo", { station });
+              }}
             />
           ))}
         </MapView>
       </View>
-    )
+    );
   }
 }
 
-const mapStateToProps = state => ({ stations: state.stations })
+const mapStateToProps = state => ({
+  stations: state.stations,
+  location: state.location
+});
 
-const ConnectedMap = connect(mapStateToProps)(MapPage)
+const ConnectedMap = connect(mapStateToProps)(MapPage);
 
-export default ConnectedMap
+export default ConnectedMap;

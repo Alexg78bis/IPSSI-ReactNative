@@ -1,10 +1,10 @@
-const stationsReducerDefaultState = []
+const stationsReducerDefaultState = [];
 
 export default (state = stationsReducerDefaultState, action) => {
   switch (action.type) {
-    case 'STATIONS_SET':
-      return action.stations
+    case "STATIONS_SET":
+      return action.stations;
     default:
-      return state
+      return state;
   }
 };
